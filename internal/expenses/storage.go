@@ -2,6 +2,7 @@ package expenses
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"time"
 )
@@ -54,4 +55,20 @@ func AddExpense(description string, amount int) (Expense, error) {
 	}
 
 	return newExpense, nil
+}
+
+func DeleteExpense(id int) error {
+	expenses, err := LoadExpenses()
+	if err != nil {
+		return err
+	}
+
+	for i, expense := range expenses {
+		if expense.ID == id {
+			expenses = append(expenses[:i], expenses[i+1:]...)
+			return SaveExpenses(expenses)
+		}
+	}
+
+	return errors.New("expense not found")
 }
