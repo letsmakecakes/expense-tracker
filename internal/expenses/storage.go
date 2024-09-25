@@ -3,6 +3,7 @@ package expenses
 import (
 	"encoding/json"
 	"os"
+	"time"
 )
 
 const expenseFilePath = "../../data/expenses.json"
@@ -32,4 +33,25 @@ func SaveExpenses(expenses []Expense) error {
 	}
 
 	return os.WriteFile(expenseFilePath, data, 0644)
+}
+
+func AddExpense(description string, amount int) (Expense, error) {
+	expenses, err := LoadExpenses()
+	if err != nil {
+		return Expense{}, err
+	}
+
+	newExpense := Expense{
+		ID:          len(expenses) + 1,
+		Date:        time.Now().Format("2006-01-02"),
+		Description: description,
+		Amount:      amount,
+	}
+
+	expenses = append(expenses, newExpense)
+	if err := SaveExpenses(expenses); err != nil {
+		return Expense{}, err
+	}
+
+	return newExpense, nil
 }
