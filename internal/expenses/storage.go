@@ -24,3 +24,12 @@ func LoadExpenses() ([]Expense, error) {
 
 	return expenses, nil
 }
+
+func SaveExpenses(expenses []Expense) error {
+	data, err := json.MarshalIndent(expenses, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(expenseFilePath, data, 0644)
+}
