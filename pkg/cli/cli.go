@@ -18,11 +18,12 @@ func HandleCommand(args []string) {
 		description := args[2]
 		amount, err := strconv.Atoi(args[4])
 		if err != nil {
-			fmt.Printf("error parsing amount: %v", err)
+			fmt.Printf("error parsing amount: %v\n", err)
+			return
 		}
 		expense, err := expenses.AddExpense(description, amount)
 		if err != nil {
-			fmt.Printf("error adding expense: %v", err)
+			fmt.Printf("error adding expense: %v\n", err)
 		} else {
 			fmt.Printf("expense added successfully (ID: %d)\n", expense.ID)
 		}
@@ -31,26 +32,26 @@ func HandleCommand(args []string) {
 
 	case "delete":
 		if len(args) < 3 {
-			fmt.Print("usage: delete --id <id>")
+			fmt.Println("usage: delete --id <id>")
 			return
 		}
 
 		id, err := strconv.Atoi(args[2])
 		if err != nil {
-			fmt.Printf("invalid ID: %v", err)
+			fmt.Printf("invalid ID: %v\n", err)
 			return
 		}
 
 		if err := expenses.DeleteExpense(id); err != nil {
-			fmt.Printf("error deleting expense: %v", err)
+			fmt.Printf("error deleting expense: %v\n", err)
 		} else {
 			fmt.Println("expense deleted successfully")
 		}
 	case "summary":
-		if len(args) == 2 {
-			filterMonth, err := strconv.Atoi(args[1])
+		if len(args) == 3 {
+			filterMonth, err := strconv.Atoi(args[2])
 			if err != nil {
-				fmt.Printf("failed to parse month: %v", err)
+				fmt.Printf("failed to parse month: %v\n", err)
 				return
 			}
 
@@ -64,7 +65,7 @@ func HandleCommand(args []string) {
 func ListAllExpenses() {
 	expenseList, err := expenses.LoadExpenses()
 	if err != nil {
-		fmt.Printf("error loading expenses: %v", err)
+		fmt.Printf("error loading expenses: %v\n", err)
 		return
 	}
 
@@ -78,7 +79,7 @@ func ListAllExpenses() {
 func ExpenseSummary() {
 	expenseList, err := expenses.LoadExpenses()
 	if err != nil {
-		fmt.Printf("error loading expenses: %v", err)
+		fmt.Printf("error loading expenses: %v\n", err)
 		return
 	}
 
@@ -87,13 +88,13 @@ func ExpenseSummary() {
 		totalAmount += expense.Amount
 	}
 
-	fmt.Printf("Total expenses: $%d", totalAmount)
+	fmt.Printf("Total expenses: $%d\n", totalAmount)
 }
 
 func ExpenseSummaryByMonth(filterMonth int) {
 	expenseList, err := expenses.LoadExpenses()
 	if err != nil {
-		fmt.Printf("error loading expenses: %v", err)
+		fmt.Printf("error loading expenses: %v\n", err)
 		return
 	}
 
