@@ -4,6 +4,7 @@ import (
 	"expense-tracker/internal/expenses"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 func HandleCommand(args []string) {
@@ -45,13 +46,25 @@ func HandleCommand(args []string) {
 		} else {
 			fmt.Println("expense deleted successfully")
 		}
+	case "summary":
+		if len(args) == 2 {
+			filterMonth, err := strconv.Atoi(args[1])
+			if err != nil {
+				fmt.Printf("failed to parse month: %v", err)
+				return
+			}
+
+			ExpenseSummaryByMonth(filterMonth)
+		} else {
+			ExpenseSummary()
+		}
 	}
 }
 
 func ListAllExpenses() {
 	expenseList, err := expenses.LoadExpenses()
 	if err != nil {
-		fmt.Printf("error loading tasks: %v", err)
+		fmt.Printf("error loading expenses: %v", err)
 		return
 	}
 
@@ -60,4 +73,42 @@ func ListAllExpenses() {
 	for _, expense := range expenseList {
 		fmt.Printf("%d   %v  %s        $%d", expense.ID, expense.Date, expense.Description, expense.Amount)
 	}
+}
+
+func ExpenseSummary() {
+	expenseList, err := expenses.LoadExpenses()
+	if err != nil {
+		fmt.Printf("error loading expenses: %v", err)
+		return
+	}
+
+	totalAmount := 0
+	for _, expense := range expenseList {
+		totalAmount += expense.Amount
+	}
+
+	fmt.Printf("Total expenses: $%d", totalAmount)
+}
+
+func ExpenseSummaryByMonth(filterMonth int) {
+	expenseList, err := expenses.LoadExpenses()
+	if err != nil {
+		fmt.Printf("error loading expenses: %v", err)
+		return
+	}
+
+	totalAmount := 0
+	for _, expense := range expenseList {
+		month, err := strconv.Atoi(strings.Split(expense.Date, "-")[1])
+		if err != nil {
+			fmt.Printf("error parsing month: %v", err)
+			return
+		}
+
+		if month == filterMonth {
+			totalAmount += expense.Amount
+		}
+	}
+
+	fmt.Printf("Total expenses for August: $%d", totalAmount)
 }
