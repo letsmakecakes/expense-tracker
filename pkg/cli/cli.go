@@ -25,5 +25,21 @@ func HandleCommand(args []string) {
 		} else {
 			fmt.Printf("expense added successfully (ID: %d)\n", expense.ID)
 		}
+	case "list":
+		ListAllExpenses()
+	}
+}
+
+func ListAllExpenses() {
+	expenseList, err := expenses.LoadExpenses()
+	if err != nil {
+		fmt.Printf("error loading tasks: %v", err)
+		return
+	}
+
+	fmt.Println("ID  Date       Description  Amount")
+
+	for _, expense := range expenseList {
+		fmt.Printf("%d   %v  %s        $%d", expense.ID, expense.Date, expense.Description, expense.Amount)
 	}
 }
