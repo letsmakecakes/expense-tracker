@@ -3,6 +3,7 @@ package expenses
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"time"
 )
@@ -40,6 +41,14 @@ func AddExpense(description string, amount int) (Expense, error) {
 	expenses, err := LoadExpenses()
 	if err != nil {
 		return Expense{}, err
+	}
+
+	if amount < 0 {
+		return Expense{}, fmt.Errorf("entered an invalid negative amount")
+	}
+
+	if len(description) == 0 {
+		return Expense{}, fmt.Errorf("description is empty")
 	}
 
 	newExpense := Expense{
