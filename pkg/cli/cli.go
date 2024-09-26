@@ -10,7 +10,7 @@ func HandleCommand(args []string) {
 	switch args[0] {
 	case "add":
 		if len(args) < 5 {
-			fmt.Print("please provide the complete expense input, for e.g; add --description \"Lunch\" --amount 20")
+			fmt.Print("please provide the complete expense input, usage: add --description <description> --amount <amount>")
 			return
 		}
 
@@ -27,6 +27,24 @@ func HandleCommand(args []string) {
 		}
 	case "list":
 		ListAllExpenses()
+
+	case "delete":
+		if len(args) < 3 {
+			fmt.Print("usage: delete --id <id>")
+			return
+		}
+
+		id, err := strconv.Atoi(args[2])
+		if err != nil {
+			fmt.Printf("invalid ID: %v", err)
+			return
+		}
+
+		if err := expenses.DeleteExpense(id); err != nil {
+			fmt.Printf("error deleting expense: %v", err)
+		} else {
+			fmt.Println("expense deleted successfully")
+		}
 	}
 }
 
