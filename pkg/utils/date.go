@@ -16,17 +16,3 @@ func FormatDate(t time.Time) string {
 func IsValidMonth(month int) bool {
 	return month >= 1 && month <= 12
 }
-
-// StartOfMonth returns the start time of the given month in the given year.
-func StartOfMonth(year, month int) time.Time {
-	return time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.Local)
-}
-
-// EndOfMonth returns the end time of the given month in the given year.
-func EndOfMonth(year, month int) time.Time {
-	// Handle the December case
-	if month == 12 {
-		return StartOfMonth(year+1, 1).Add(-time.Second)
-	}
-	return StartOfMonth(year, month+1).Add(-time.Second)
-}
