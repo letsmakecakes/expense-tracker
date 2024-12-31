@@ -1,1 +1,12 @@
-[]
+{
+ "last_id": 2,
+ "expenses": [
+  {
+   "id": 2,
+   "description": "Fruits",
+   "amount": 210,
+   "category": "grocery",
+   "date": "2024-12-31"
+  }
+ ]
+}
