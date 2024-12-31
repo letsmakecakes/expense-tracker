@@ -114,7 +114,7 @@ expense-tracker delete --id <id>
 
 ### Summary Command
 ```bash
-expense-tracker summary [--month <month>]
+expense-tracker summary [--month <year>-<month>]
 ```
 - `--month`: Month number (1-12) for monthly summary (optional)
 
